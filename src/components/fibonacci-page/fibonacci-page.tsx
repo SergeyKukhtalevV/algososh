@@ -1,15 +1,15 @@
 import React, {useState} from "react";
 import {SolutionLayout} from "../ui/solution-layout/solution-layout";
-import style from './string.module.css'
+import style from './fibonacci-page.module.css'
 import {Input} from "../ui/input/input";
 import {Button} from "../ui/button/button";
-import {getFibonacciArray, setDelay, swap} from '../../utils/utils'
+import {getFibonacciArray, setDelay} from '../../utils/utils'
 import {Circle} from "../ui/circle/circle";
 import { SHORT_DELAY_IN_MS} from "../../constants/delays";
 
 export const FibonacciPage: React.FC = () => {
   const [loader, setLoader] = useState(false);
-  const [inputValue, setInputValue] = useState<number>(0);
+  const [inputValue, setInputValue] = useState<number>(1);
   const [fibonacciArray, setFibonacciArray] = useState<number[]>([])
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -19,10 +19,9 @@ export const FibonacciPage: React.FC = () => {
   const handleClick = async () => {
     setLoader(true);
     const array = getFibonacciArray(inputValue);
-
-    for (let i = 0; i < array.length; i++) {
+    for (let i = 0; i <= array.length; i++) {
       await setDelay(SHORT_DELAY_IN_MS);
-      setFibonacciArray(array.slice(0, i + 1));
+      setFibonacciArray(array.slice(1, i));
     }
     setLoader(false);
   }
@@ -35,7 +34,7 @@ export const FibonacciPage: React.FC = () => {
           <Button text={'Рассчитать'}
                   linkedList={'small'}
                   isLoader={loader}
-                  disabled={inputValue <= 19 && inputValue >= 1 ? false : true}
+                  disabled={!(inputValue <= 19 && inputValue >= 1)}
                   onClick={handleClick}
           />
         </div>
@@ -43,7 +42,7 @@ export const FibonacciPage: React.FC = () => {
           {fibonacciArray.map((item: number, index) => {
             return (
               <li key={index}>
-                <Circle letter={`${item}`}/>
+                <Circle letter={`${item}`} index={index}/>
               </li>
             )
           })}

@@ -10,15 +10,12 @@ export const swap = (array: TElement[], i: number, j: number) => {
 
 export const getFibonacciArray = (n: number) => {
   const arr: number[] = [];
-  if (n <= 0) {
-    return false;
-  }
-  for (let i = 0; i < n; i++) {
+  for (let i = 0; i <= n + 1; i++) {
     if (i < 2) {
       arr[i] = i;
     } else {
       arr[i] = arr[i - 1] + arr[i - 2];
     }
   }
-  return arr[n - 1];
+  return arr;
 }
