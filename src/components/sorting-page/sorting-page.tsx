@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {SolutionLayout} from "../ui/solution-layout/solution-layout";
-import style from "../fibonacci-page/fibonacci-page.module.css";
+import style from "./sorting-page.module.css";
 import {Button} from "../ui/button/button";
 import {RadioInput} from "../ui/radio-input/radio-input";
 import {Direction} from "../../types/direction";
@@ -14,7 +14,6 @@ import {Column} from "../ui/column/column";
 export const SortingPage: React.FC = () => {
   const [typeSorting, setTypeSorting] = React.useState<string>('selection');
   const [loader, setLoader] = useState(false);
-  const [arrayToSorting, setArrayToSorting] = useState<TNumber[]>([]);
   const [arrayToRender, setArrayToRender] = useState<TNumber[]>([]);
 
   const handleSortingIncrease = (array: TNumber[]) => {
@@ -31,7 +30,7 @@ export const SortingPage: React.FC = () => {
       //TODO вызвать функцию сортирвки пузырьком по убыванию
     }
   }
-  const getArrayToSorting = () => {
+  const getarrayToRender = () => {
     const array: TNumber[] = getRandomArr(minLenArr, maxLenArr).map((value: number) => {
       return {value, color: ElementStates.Default};
     });
@@ -42,7 +41,7 @@ export const SortingPage: React.FC = () => {
     <SolutionLayout title="Сортировка массива">
       <div className={style.wrapper}>
         <div className={style.container}>
-          <div className={'radioButtons'}>
+          <div className={style.radioButtons}>
             <RadioInput label={'Выбор'} value={'selection'} name={'typeSorting'} defaultChecked={true}
                         onClick={() => {
                           setTypeSorting('selection')
@@ -51,13 +50,13 @@ export const SortingPage: React.FC = () => {
               setTypeSorting('selection')
             }}/>
           </div>
-          <div className={'directionSortingButtons'}>
+          <div className={style.directionSortingButtons}>
             <Button text={'По возрастанию'} isLoader={loader} sorting={Direction.Ascending}
-                    onClick={() => handleSortingIncrease(arrayToSorting)}/>
+                    onClick={() => handleSortingIncrease(arrayToRender)}/>
             <Button text={'По убыванию'} isLoader={loader} sorting={Direction.Descending}
-                    onClick={() => handleSortingDecrease(arrayToSorting)}/>
+                    onClick={() => handleSortingDecrease(arrayToRender)}/>
           </div>
-          <Button text={'Новый массив'} onClick={getArrayToSorting} disabled={loader}/>
+          <Button text={'Новый массив'} onClick={getarrayToRender} disabled={loader}/>
         </div>
         <ul className={style.containerResult}>
           {arrayToRender.length

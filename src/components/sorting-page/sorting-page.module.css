@@ -2,13 +2,14 @@
   align-items: center;
   display: flex;
   flex-direction: column;
-  row-gap: 120px;
+  row-gap: 48px;
   width: 100%;
 }
 
 .container {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
   margin: 0 auto;
   max-width: 980px;
   width: 100%;
