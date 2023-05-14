@@ -19,3 +19,12 @@ export const getFibonacciArray = (n: number) => {
   }
   return arr;
 }
+
+export const getRandomArr = (minLen: number, maxLen: number):number[] => {
+  const arr: number[] = [];
+  const arrLength = Math.floor(Math.random()*(maxLen - minLen) + minLen);
+  for(let i = 0; i < arrLength; i++) {
+    arr[i] = Math.floor(Math.random()*100);
+  }
+  return arr;
+}
