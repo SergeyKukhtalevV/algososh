@@ -6,10 +6,9 @@ import {RadioInput} from "../ui/radio-input/radio-input";
 import {Direction} from "../../types/direction";
 import {TNumber} from "../../types/element";
 import {ElementStates} from "../../types/element-states";
-import {getRandomArr, setDelay, swap} from "../../utils/utils";
+import {bubbleSort, getRandomArr, selectionSort} from "../../utils/utils";
 import {maxLenArr, minLenArr} from "../../constants/element-captions";
 import {Column} from "../ui/column/column";
-import {SHORT_DELAY_IN_MS} from "../../constants/delays";
 
 
 export const SortingPage: React.FC = () => {
@@ -18,56 +17,25 @@ export const SortingPage: React.FC = () => {
   const [loaderDec, setLoaderDec] = useState(false);
   const [arrayToRender, setArrayToRender] = useState<TNumber[]>([]);
 
-  const selectionSort = async (arr: TNumber[], sortDirection = true) => {
-    setLoaderInc(true);
-    console.log(loaderInc);
-    const {length} = arr;
-    for (let i = 0; i < length - 1; i++) {
-      let currInd = i;
-      for (let j = i + 1; j < length; j++) {
-        arr[i].color = ElementStates.Changing;
-        arr[j].color = ElementStates.Changing;
-        setArrayToRender([...arr]);
-        await setDelay(SHORT_DELAY_IN_MS);
-        if(sortDirection) {
-          if (arr[currInd].value > arr[j].value) {
-            currInd = j;
-          }
-        } else {
-          if (arr[currInd].value < arr[j].value) {
-            currInd = j;
-          }
-        }
-
-        arr[j].color = ElementStates.Default;
-      }
-      swap(arr, i, currInd);
-      arr[i].color = ElementStates.Modified;
-
-    }
-    arr[length - 1].color = ElementStates.Modified;
-    setArrayToRender([...arr]);
-    setLoaderInc(false);
-    console.log(loaderInc);
-  }
-
   const handleSortingIncrease = (arr: TNumber[]) => {
     if (typeSorting === 'selection') {
       //TODO вызвать функцию сортирвки выбором по возрастанию
 
-      selectionSort(arr);
+      selectionSort(arr, setLoaderInc, setArrayToRender);
 
     } else {
+      bubbleSort(arr, setLoaderInc, setArrayToRender);
       //TODO вызвать функцию сортирвки пузырьком по возрастанию
     }
   }
   const handleSortingDecrease = (arr: TNumber[]) => {
     if (typeSorting === 'selection') {
       //TODO вызвать функцию сортирвки выбором по убыванию
-      selectionSort(arr, false);
+      selectionSort(arr, setLoaderDec, setArrayToRender,false);
 
     } else {
       //TODO вызвать функцию сортирвки пузырьком по убыванию
+      bubbleSort(arr, setLoaderInc, setArrayToRender, false);
     }
   }
   const getArrayToRender = () => {
@@ -87,13 +55,13 @@ export const SortingPage: React.FC = () => {
                           setTypeSorting('selection')
                         }}/>
             <RadioInput label={'Пузырёк'} value={'bubble'} name={'typeSorting'} onClick={() => {
-              setTypeSorting('selection')
+              setTypeSorting('bubble')
             }}/>
           </div>
           <div className={style.directionSortingButtons}>
-            <Button text={'По возрастанию'} isLoader={loaderInc} sorting={Direction.Ascending} disabled={loaderDec}
+            <Button text={'По возрастанию'} isLoader={loaderInc} sorting={Direction.Ascending} disabled={loaderDec || arrayToRender.length === 0}
                     onClick={() => handleSortingIncrease(arrayToRender)} linkedList="big"/>
-            <Button text={'По убыванию'} isLoader={loaderDec} sorting={Direction.Descending} disabled={loaderInc}
+            <Button text={'По убыванию'} isLoader={loaderDec} sorting={Direction.Descending} disabled={loaderInc || arrayToRender.length === 0}
                     onClick={() => handleSortingDecrease(arrayToRender)} linkedList="big"/>
           </div>
           <Button text={'Новый массив'} onClick={getArrayToRender} disabled={loaderInc || loaderDec}/>
