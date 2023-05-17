@@ -21,7 +21,7 @@ export const FibonacciPage: React.FC = () => {
     const array = getFibonacciArray(inputValue);
     for (let i = 0; i <= array.length; i++) {
       await setDelay(SHORT_DELAY_IN_MS);
-      setFibonacciArray(array.slice(1, i));
+      setFibonacciArray(array.slice(0, i));
     }
     setLoader(false);
   }
@@ -42,7 +42,7 @@ export const FibonacciPage: React.FC = () => {
           {fibonacciArray.map((item: number, index) => {
             return (
               <li key={index}>
-                <Circle letter={`${item}`} index={index}/>
+                <Circle letter={`${item}`} index={index + 1}/>
               </li>
             )
           })}

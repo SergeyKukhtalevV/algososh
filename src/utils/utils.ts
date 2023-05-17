@@ -13,7 +13,7 @@ export const swap = (array: any[], i: number, j: number) => {
 
 export const getFibonacciArray = (n: number) => {
   const arr: number[] = [];
-  for (let i = 0; i <= n + 1; i++) {
+  for (let i = 0; i < n ; i++) {
     if (i < 2) {
       arr[i] = i;
     } else {
