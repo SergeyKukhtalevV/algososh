@@ -12,17 +12,20 @@ import {TElement} from "../../types/element";
 export const StringComponent: React.FC = () => {
 
   const [loader, setLoader] = useState(false);
-  const [inputValue, setInputValue] = useState<TElement[]>([]);
+  const [inputValue, setInputValue] = useState<string>('');
+  const [arrayToRender, setArrayToRender] = useState<TElement[]>([]);
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const array: TElement[] = e.target.value.split('').map((value: string) => {
-      return {value, color: ElementStates.Default};
-    });
-    setInputValue(array);
+    setInputValue(e.target.value);
   };
 
-  const handleClick = async (array: TElement[]) => {
+  const handleClick = async (inputValue: string) => {
+
     setLoader(true);
+    const array: TElement[] = inputValue.split('').map((value: string) => {
+      return {value, color: ElementStates.Default};
+    });
+    setArrayToRender(array);
     const medium = Math.ceil(array.length / 2);
 
     for (let i = 0; i < medium; i++) {
@@ -30,14 +33,14 @@ export const StringComponent: React.FC = () => {
       if (i !== j) {
         array[i].color = ElementStates.Changing;
         array[j].color = ElementStates.Changing;
-        setInputValue([...array]);
+        setArrayToRender([...array]);
         await setDelay(DELAY_IN_MS);
       }
 
       swap(array, i, j);
       array[i].color = ElementStates.Modified;
       array[j].color = ElementStates.Modified;
-      setInputValue([...array]);
+      setArrayToRender([...array]);
     }
     setLoader(false);
   }
@@ -54,7 +57,7 @@ export const StringComponent: React.FC = () => {
           />
         </div>
         <ul className={style.containerResult}>
-          {inputValue.map((item: TElement, index) => {
+          {arrayToRender.map((item: TElement, index) => {
             return (
               <li key={index}>
               <Circle letter={item.value} state={item.color} />
