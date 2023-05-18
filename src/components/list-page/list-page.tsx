@@ -8,11 +8,12 @@ import {TElement, TNumber} from "../../types/element";
 import {getRandomArr} from "../../utils/utils";
 import {LinkedList} from "./LinkedList";
 import {ElementStates} from "../../types/element-states";
+import {ArrowIcon} from "../ui/icons/arrow-icon";
 
 export const ListPage: React.FC = () => {
   const [inputValue, setInputValue] = useState<string>("");
   const [inputIndex, setInputIndex] = useState<string | number>('');
-  const [linkedList] = useState(new LinkedList<TElement | TNumber>(getRandomArr(3,6).map((value: number) => {
+  const [linkedList] = useState(new LinkedList<TElement | TNumber>(getRandomArr(3, 8).map((value: number) => {
     return {value, color: ElementStates.Default};
   })));
   const [arrayToRender, setArrayToRender] = useState(linkedList.toArray());
@@ -29,16 +30,21 @@ export const ListPage: React.FC = () => {
   const handleInputIndex = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputIndex(e.target.value);
   }
+
   return (
     <SolutionLayout title="Связный список">
       <div className={style.wrapper}>
         <div className={style.container}>
           <Input type={"text"} maxLength={4} isLimitText={true} onChange={handleInputValue} value={inputValue}/>
           <div className={style.changeButtons}>
-            <Button isLoader={loaderAddHead} linkedList="big" text={'Добавить в head'}/>
-            <Button isLoader={loaderAddTail} linkedList="big" text={'Добавить в tail'}/>
-            <Button isLoader={loaderDelHead} linkedList="big" text={'Удалить из head'}/>
-            <Button isLoader={loaderDelTail} linkedList="big" text={'Удалить из tail'}/>
+            <Button isLoader={loaderAddHead} linkedList="big" text={'Добавить в head'}
+                    disabled={!inputValue.length || loaderAddTail || loaderDelHead || loaderDelTail || loaderAddByIndex || loaderDelByIndex}/>
+            <Button isLoader={loaderAddTail} linkedList="big" text={'Добавить в tail'}
+                    disabled={!inputValue.length || loaderAddHead || loaderDelHead || loaderDelTail || loaderAddByIndex || loaderDelByIndex}/>
+            <Button isLoader={loaderDelHead} linkedList="big" text={'Удалить из head'}
+                    disabled={loaderAddHead || loaderAddTail || loaderDelTail || loaderAddByIndex || loaderDelByIndex}/>
+            <Button isLoader={loaderDelTail} linkedList="big" text={'Удалить из tail'}
+                    disabled={loaderAddHead || loaderAddTail || loaderDelHead || loaderAddByIndex || loaderDelByIndex}/>
           </div>
         </div>
         <div className={style.container}>
@@ -46,14 +52,24 @@ export const ListPage: React.FC = () => {
           <Input type={"number"} onChange={handleInputIndex}
                  value={Number(inputIndex)}/>
           <div className={style.changeButtons}>
-            <Button isLoader={loaderAddByIndex} linkedList="big" text={'Добавить по индексу'}/>
-            <Button isLoader={loaderDelByIndex} linkedList="big" text={'Удалить по индексу'}/>
+            <Button isLoader={loaderAddByIndex} linkedList="big" text={'Добавить по индексу'}
+                    disabled={!inputIndex || loaderAddHead || loaderAddTail || loaderDelHead || loaderDelTail || loaderDelByIndex}/>
+            <Button isLoader={loaderDelByIndex} linkedList="big" text={'Удалить по индексу'}
+                    disabled={!inputIndex || loaderAddHead || loaderAddTail || loaderDelHead || loaderAddByIndex || loaderDelTail}/>
           </div>
         </div>
         <ul className={style.containerResult}>
-          <li>
-            <Circle/>
-          </li>
+          {arrayToRender.map((item, index: number) => {
+            return (
+              <li key={index} className={style.node}>
+                <Circle key={index} index={index} letter={`${item.value.value}`} state={item.value.color}
+                        head={index === 0 ? 'head' : ''}
+                        tail={item.next === null ? 'tail' : ''}/>
+                {item.next && <ArrowIcon fill={item.value.color === ElementStates.Changing ? '#D252E1' : undefined}/>}
+              </li>
+            )
+          })}
+
         </ul>
       </div>
     </SolutionLayout>
