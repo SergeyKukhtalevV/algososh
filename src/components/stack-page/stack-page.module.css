@@ -18,13 +18,13 @@
 
 
 .changeButtons {
+  align-items: center;
+  column-gap: 12px;
+  display: flex;
+  flex-direction: row;
   margin-left: 12px;
   max-width: 418px;
   width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  column-gap: 12px;
 }
 
 .containerResult {

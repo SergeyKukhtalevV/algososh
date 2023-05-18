@@ -16,22 +16,22 @@
 }
 
 .radioButtons {
+  align-items: center;
   display: flex;
   flex-direction: row;
-  align-items: center;
   justify-content: space-between;
   max-width: 221px;
   width: 100%;
 }
 
 .directionSortingButtons {
-  max-width: 418px;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
   align-items: center;
   column-gap: 12px;
+  display: flex;
+  flex-direction: row;
   justify-content: space-between;
+  max-width: 418px;
+  width: 100%;
 }
 
 .containerResult {

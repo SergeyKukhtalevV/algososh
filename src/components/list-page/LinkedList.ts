@@ -18,21 +18,18 @@ interface ILinkedList<T> {
   getLastAddedNode: () => Node<T> | null;
   findByIndex: (index: number) => Node<T> | null;
   toArray: () => Node<T>[];
-  getSize: () => number;
   getLength: () => number;
 }
 
 export class LinkedList<T> implements ILinkedList<T> {
   private head: Node<T> | null;
   private tail: Node<T> | null;
-  private size: number;
   private length: number;
   private lastAddedNode: Node<T> | null;
 
   constructor(values: T[] = []) {
     this.head = null;
     this.tail = null;
-    this.size = 0;
     this.length = 0;
     this.lastAddedNode = null;
     for (let val of values) {
@@ -41,7 +38,7 @@ export class LinkedList<T> implements ILinkedList<T> {
   }
 
   prepend(element: T) {
-    const node = new Node(element);
+    const node = new Node(element, this.head);
 
     this.head = node;
 
@@ -151,7 +148,7 @@ export class LinkedList<T> implements ILinkedList<T> {
     let curr = this.head;
     let i = 0;
     while (i < index) {
-      if(curr) {
+      if (curr) {
         curr = curr.next;
       }
       i++;
@@ -171,7 +168,7 @@ export class LinkedList<T> implements ILinkedList<T> {
   }
 
   insertAt(element: T, index: number) {
-    if (index < 0 || index > this.size) {
+    if (index < 0 || index > this.length) {
       console.log('Enter a valid index');
       return;
     } else {
@@ -195,11 +192,6 @@ export class LinkedList<T> implements ILinkedList<T> {
         this.length++;
       }
     }
-  }
-
-
-  getSize() {
-    return this.size;
   }
 
   getLength() {
