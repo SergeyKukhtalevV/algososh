@@ -168,30 +168,31 @@ export class LinkedList<T> implements ILinkedList<T> {
   }
 
   insertAt(element: T, index: number) {
-    if (index < 0 || index > this.length) {
-      console.log('Enter a valid index');
-      return;
-    } else {
-      if (index === 0) {
-        this.prepend(element);
-      }
-      if (index === this.length - 1) {
-        this.append(element);
-      } else {
-        const node = new Node(element);
-        let curr = this.head;
-        let currIndex = 0;
-        while (curr && currIndex < index - 1) {
-          currIndex++;
-          curr = curr.next;
-        }
-        if (curr) {
-          node.next = curr.next;
-          curr.next = node;
-        }
-        this.length++;
-      }
+    if (index < 0 || index >= this.length) {
+      throw new Error("Index out of bounds");
     }
+
+    if (index === 0) {
+      this.prepend(element);
+    }
+    if (index === this.length - 1) {
+      this.append(element);
+    } else {
+      const node = new Node(element);
+      let curr = this.head;
+      let currIndex = 0;
+      while (curr && currIndex < index - 1) {
+        currIndex++;
+        curr = curr.next;
+      }
+      if (curr) {
+        node.next = curr.next;
+        curr.next = node;
+      }
+      this.length++;
+      this.lastAddedNode = node;
+    }
+    return this;
   }
 
   getLength() {

@@ -24,7 +24,7 @@ export const ListPage: React.FC = () => {
   const [loaderDelTail, setLoaderDelTail] = useState(false);
   const [loaderAddByIndex, setLoaderAddByIndex] = useState(false);
   const [loaderDelByIndex, setLoaderDelByIndex] = useState(false);
-  const [addedNode, setAddedNode] = useState<Node<TElement | TNumber> | null>(null);
+
   const [addedIndex, setAddedIndex] = useState<number>(-1);
 
   const handleInputValue = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,7 +46,6 @@ export const ListPage: React.FC = () => {
 
     await setDelay(SHORT_DELAY_IN_MS);
     setArrayToRender(linkedList.toArray());
-    setAddedNode(linkedList.getLastAddedNode());
 
     linkedList.getLastAddedNode()!.value = {
       value: `${inputValue}`,
@@ -57,7 +56,7 @@ export const ListPage: React.FC = () => {
     setArrayToRender(linkedList.toArray());
     setInputValue("");
     setLoaderAddHead(false);
-    setAddedNode(null);
+
     setAddedIndex(-1);
   }
 
@@ -73,7 +72,7 @@ export const ListPage: React.FC = () => {
 
     await setDelay(SHORT_DELAY_IN_MS);
     setArrayToRender(linkedList.toArray());
-    setAddedNode(linkedList.getLastAddedNode());
+
     setAddedIndex(-1);
     linkedList.getLastAddedNode()!.value = {
       value: `${inputValue}`,
@@ -84,7 +83,34 @@ export const ListPage: React.FC = () => {
     setArrayToRender(linkedList.toArray());
     setInputValue("");
     setLoaderAddHead(false);
-    setAddedNode(null);
+
+  }
+  const handleAddedByIndexInList = async (inputValue: string | number, inputIndex: string | number) => {
+
+    setLoaderAddByIndex(true);
+    setAddedIndex(Number(inputIndex));
+    await setDelay(SHORT_DELAY_IN_MS);
+
+    linkedList.insertAt({
+      value: `${inputValue}`,
+      color: ElementStates.Modified
+    }, Number(inputIndex));
+
+    await setDelay(SHORT_DELAY_IN_MS);
+    setArrayToRender(linkedList.toArray());
+
+    setAddedIndex(-1);
+    linkedList.getLastAddedNode()!.value = {
+      value: `${inputValue}`,
+      color: ElementStates.Default
+    };
+
+    await setDelay(SHORT_DELAY_IN_MS);
+    setArrayToRender(linkedList.toArray());
+    setInputValue("");
+    setInputIndex("");
+    setLoaderAddByIndex(false);
+
   }
   return (
     <SolutionLayout title="Связный список">
@@ -114,7 +140,10 @@ export const ListPage: React.FC = () => {
                  value={Number(inputIndex)}/>
           <div className={style.changeButtons}>
             <Button isLoader={loaderAddByIndex} linkedList="big" text={'Добавить по индексу'}
-                    disabled={!inputIndex || loaderAddHead || loaderAddTail || loaderDelHead || loaderDelTail || loaderDelByIndex}/>
+                    disabled={!inputIndex || loaderAddHead || loaderAddTail || loaderDelHead || loaderDelTail || loaderDelByIndex}
+                    onClick={() => {
+                      handleAddedByIndexInList(inputValue, inputIndex)
+                    }}/>
             <Button isLoader={loaderDelByIndex} linkedList="big" text={'Удалить по индексу'}
                     disabled={!inputIndex || loaderAddHead || loaderAddTail || loaderDelHead || loaderAddByIndex || loaderDelTail}/>
           </div>
