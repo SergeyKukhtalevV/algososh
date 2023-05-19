@@ -61,6 +61,31 @@ export const ListPage: React.FC = () => {
     setAddedIndex(-1);
   }
 
+  const handleAppendInList = async (inputValue: string | number) => {
+    setLoaderAddHead(true);
+    setAddedIndex(linkedList.getLength() - 1);
+    await setDelay(SHORT_DELAY_IN_MS);
+
+    linkedList.append({
+      value: `${inputValue}`,
+      color: ElementStates.Modified
+    });
+
+    await setDelay(SHORT_DELAY_IN_MS);
+    setArrayToRender(linkedList.toArray());
+    setAddedNode(linkedList.getLastAddedNode());
+    setAddedIndex(-1);
+    linkedList.getLastAddedNode()!.value = {
+      value: `${inputValue}`,
+      color: ElementStates.Default
+    };
+
+    await setDelay(SHORT_DELAY_IN_MS);
+    setArrayToRender(linkedList.toArray());
+    setInputValue("");
+    setLoaderAddHead(false);
+    setAddedNode(null);
+  }
   return (
     <SolutionLayout title="Связный список">
       <div className={style.wrapper}>
@@ -73,7 +98,10 @@ export const ListPage: React.FC = () => {
                       handlePrependInList(inputValue)
                     }}/>
             <Button isLoader={loaderAddTail} linkedList="big" text={'Добавить в tail'}
-                    disabled={!inputValue || loaderAddHead || loaderDelHead || loaderDelTail || loaderAddByIndex || loaderDelByIndex}/>
+                    disabled={!inputValue || loaderAddHead || loaderDelHead || loaderDelTail || loaderAddByIndex || loaderDelByIndex}
+                    onClick={() => {
+                      handleAppendInList(inputValue)
+                    }}/>
             <Button isLoader={loaderDelHead} linkedList="big" text={'Удалить из head'}
                     disabled={loaderAddHead || loaderAddTail || loaderDelTail || loaderAddByIndex || loaderDelByIndex}/>
             <Button isLoader={loaderDelTail} linkedList="big" text={'Удалить из tail'}
