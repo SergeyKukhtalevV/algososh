@@ -119,7 +119,7 @@ export const ListPage: React.FC = () => {
     setLoaderDelHead(true);
     setDeletedIndex(0);
     setDeletedNode(linkedList.findByIndex(0));
-    setDeletedIndex(0);
+
     linkedList.findByIndex(0)!.value.value = '';
     await setDelay(SHORT_DELAY_IN_MS);
     linkedList.deleteHead();
@@ -129,6 +129,22 @@ export const ListPage: React.FC = () => {
     setLoaderDelHead(false);
     setDeletedIndex(-1);
   }
+
+  const handleDeletedTailFromList = async () => {
+    setLoaderDelTail(true);
+    setDeletedIndex(linkedList.getLength() - 1);
+    setDeletedNode(linkedList.findByIndex(linkedList.getLength() - 1));
+
+    linkedList.findByIndex(linkedList.getLength() - 1)!.value.value = '';
+    await setDelay(SHORT_DELAY_IN_MS);
+    linkedList.deleteTail();
+
+    setArrayToRender(linkedList.toArray());
+    await setDelay(SHORT_DELAY_IN_MS);
+    setLoaderDelTail(false);
+    setDeletedIndex(-1);
+  }
+
   return (
     <SolutionLayout title="Связный список">
       <div className={style.wrapper}>
@@ -149,7 +165,8 @@ export const ListPage: React.FC = () => {
                     disabled={loaderAddHead || loaderAddTail || loaderDelTail || loaderAddByIndex || loaderDelByIndex}
                     onClick={handleDeletedHeadFromList}/>
             <Button isLoader={loaderDelTail} linkedList="big" text={'Удалить из tail'}
-                    disabled={loaderAddHead || loaderAddTail || loaderDelHead || loaderAddByIndex || loaderDelByIndex}/>
+                    disabled={loaderAddHead || loaderAddTail || loaderDelHead || loaderAddByIndex || loaderDelByIndex}
+                    onClick={handleDeletedTailFromList}/>
           </div>
         </div>
         <div className={style.container}>
