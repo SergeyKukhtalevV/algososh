@@ -26,7 +26,9 @@ export const ListPage: React.FC = () => {
   const [loaderDelByIndex, setLoaderDelByIndex] = useState(false);
 
   const [addedIndex, setAddedIndex] = useState<number>(-1);
-
+  const [deletedIndex, setDeletedIndex] = useState<number>(-1);
+  const [deletedNode, setDeletedNode] =
+    useState<Node<TElement | TNumber> | null>(null);
   const handleInputValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   }
@@ -61,7 +63,7 @@ export const ListPage: React.FC = () => {
   }
 
   const handleAppendInList = async (inputValue: string | number) => {
-    setLoaderAddHead(true);
+    setLoaderAddTail(true);
     setAddedIndex(linkedList.getLength() - 1);
     await setDelay(SHORT_DELAY_IN_MS);
 
@@ -82,7 +84,7 @@ export const ListPage: React.FC = () => {
     await setDelay(SHORT_DELAY_IN_MS);
     setArrayToRender(linkedList.toArray());
     setInputValue("");
-    setLoaderAddHead(false);
+    setLoaderAddTail(false);
 
   }
   const handleAddedByIndexInList = async (inputValue: string | number, inputIndex: string | number) => {
@@ -112,6 +114,21 @@ export const ListPage: React.FC = () => {
     setLoaderAddByIndex(false);
 
   }
+
+  const handleDeletedHeadFromList = async () => {
+    setLoaderDelHead(true);
+    setDeletedIndex(0);
+    setDeletedNode(linkedList.findByIndex(0));
+    setDeletedIndex(0);
+    linkedList.findByIndex(0)!.value.value = '';
+    await setDelay(SHORT_DELAY_IN_MS);
+    linkedList.deleteHead();
+
+    setArrayToRender(linkedList.toArray());
+    await setDelay(SHORT_DELAY_IN_MS);
+    setLoaderDelHead(false);
+    setDeletedIndex(-1);
+  }
   return (
     <SolutionLayout title="Связный список">
       <div className={style.wrapper}>
@@ -129,7 +146,8 @@ export const ListPage: React.FC = () => {
                       handleAppendInList(inputValue)
                     }}/>
             <Button isLoader={loaderDelHead} linkedList="big" text={'Удалить из head'}
-                    disabled={loaderAddHead || loaderAddTail || loaderDelTail || loaderAddByIndex || loaderDelByIndex}/>
+                    disabled={loaderAddHead || loaderAddTail || loaderDelTail || loaderAddByIndex || loaderDelByIndex}
+                    onClick={handleDeletedHeadFromList}/>
             <Button isLoader={loaderDelTail} linkedList="big" text={'Удалить из tail'}
                     disabled={loaderAddHead || loaderAddTail || loaderDelHead || loaderAddByIndex || loaderDelByIndex}/>
           </div>
@@ -161,8 +179,16 @@ export const ListPage: React.FC = () => {
                   />
                   : null}
                 <Circle key={index} index={index} letter={`${item.value.value}`} state={item.value.color}
-                        head={index === 0 && !loaderAddHead ? 'head' : ''}
-                        tail={item.next === null ? 'tail' : ''}/>
+                        head={index === 0 && !loaderAddHead && !loaderDelHead ? 'head' : ''}
+                        tail={item.next === null && !loaderAddTail && !loaderDelTail ? 'tail' : ''}/>
+                {deletedIndex === index
+                  ? <Circle
+                    state={ElementStates.Changing}
+                    isSmall={true}
+                    letter={`${deletedNode?.value.value}`}
+                    extraClass={style.deletedNode}
+                  />
+                  : null}
                 {item.next && <ArrowIcon fill={item.value.color === ElementStates.Changing ? '#D252E1' : undefined}/>}
               </li>
             )

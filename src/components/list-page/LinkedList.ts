@@ -173,10 +173,10 @@ export class LinkedList<T> implements ILinkedList<T> {
     }
 
     if (index === 0) {
-      this.prepend(element);
+      return this.prepend(element);
     }
     if (index === this.length - 1) {
-      this.append(element);
+      return this.append(element);
     } else {
       const node = new Node(element);
       let curr = this.head;

@@ -52,3 +52,9 @@
   top: -80px;
   left: 12px;
 }
+
+.deletedNode{
+  position: absolute;
+  bottom: -120px;
+  left: 12px;
+}
