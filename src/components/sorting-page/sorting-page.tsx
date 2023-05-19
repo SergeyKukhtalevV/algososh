@@ -19,22 +19,21 @@ export const SortingPage: React.FC = () => {
 
   const handleSortingIncrease = (arr: TNumber[]) => {
     if (typeSorting === 'selection') {
-      //TODO вызвать функцию сортирвки выбором по возрастанию
 
       selectionSort(arr, setLoaderInc, setArrayToRender);
 
     } else {
       bubbleSort(arr, setLoaderInc, setArrayToRender);
-      //TODO вызвать функцию сортирвки пузырьком по возрастанию
+
     }
   }
   const handleSortingDecrease = (arr: TNumber[]) => {
     if (typeSorting === 'selection') {
-      //TODO вызвать функцию сортирвки выбором по убыванию
+
       selectionSort(arr, setLoaderDec, setArrayToRender,false);
 
     } else {
-      //TODO вызвать функцию сортирвки пузырьком по убыванию
+
       bubbleSort(arr, setLoaderInc, setArrayToRender, false);
     }
   }

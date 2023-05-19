@@ -145,6 +145,23 @@ export const ListPage: React.FC = () => {
     setDeletedIndex(-1);
   }
 
+  const handleDeletedByIndexInList = async (inputIndex: string | number) => {
+
+    setLoaderDelByIndex(true);
+    setDeletedIndex(Number(inputIndex));
+    setDeletedNode(linkedList.findByIndex(Number(inputIndex)));
+
+    linkedList.findByIndex(Number(inputIndex))!.value.value = '';
+    await setDelay(SHORT_DELAY_IN_MS);
+    linkedList.deleteByIndex(Number(inputIndex));
+
+    setArrayToRender(linkedList.toArray());
+    await setDelay(SHORT_DELAY_IN_MS);
+    setLoaderDelByIndex(false);
+    setDeletedIndex(-1);
+
+  }
+
   return (
     <SolutionLayout title="Связный список">
       <div className={style.wrapper}>
@@ -170,17 +187,20 @@ export const ListPage: React.FC = () => {
           </div>
         </div>
         <div className={style.container}>
-          {/*TODO обдумаь макс и мин границы ввода индекса index < 0 || index > this.length*/}
+
           <Input type={"number"} onChange={handleInputIndex}
                  value={Number(inputIndex)}/>
           <div className={style.changeButtons}>
             <Button isLoader={loaderAddByIndex} linkedList="big" text={'Добавить по индексу'}
-                    disabled={!inputIndex || loaderAddHead || loaderAddTail || loaderDelHead || loaderDelTail || loaderDelByIndex}
+                    disabled={!inputValue || !inputIndex || loaderAddHead || loaderAddTail || loaderDelHead || loaderDelTail || loaderDelByIndex}
                     onClick={() => {
                       handleAddedByIndexInList(inputValue, inputIndex)
                     }}/>
             <Button isLoader={loaderDelByIndex} linkedList="big" text={'Удалить по индексу'}
-                    disabled={!inputIndex || loaderAddHead || loaderAddTail || loaderDelHead || loaderAddByIndex || loaderDelTail}/>
+                    disabled={!inputIndex || loaderAddHead || loaderAddTail || loaderDelHead || loaderAddByIndex || loaderDelTail}
+                    onClick={() => {
+                      handleDeletedByIndexInList(inputIndex)
+                    }}/>
           </div>
         </div>
         <ul className={style.containerResult}>
@@ -196,8 +216,8 @@ export const ListPage: React.FC = () => {
                   />
                   : null}
                 <Circle key={index} index={index} letter={`${item.value.value}`} state={item.value.color}
-                        head={index === 0 && !loaderAddHead && !loaderDelHead ? 'head' : ''}
-                        tail={item.next === null && !loaderAddTail && !loaderDelTail ? 'tail' : ''}/>
+                        head={index === 0 && !loaderAddHead && !loaderDelHead && !loaderAddByIndex && !loaderDelByIndex ? 'head' : ''}
+                        tail={item.next === null && !loaderAddTail && !loaderDelTail && !loaderAddByIndex && !loaderDelByIndex ? 'tail' : ''}/>
                 {deletedIndex === index
                   ? <Circle
                     state={ElementStates.Changing}
