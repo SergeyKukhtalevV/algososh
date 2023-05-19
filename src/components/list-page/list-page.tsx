@@ -24,7 +24,8 @@ export const ListPage: React.FC = () => {
   const [loaderDelTail, setLoaderDelTail] = useState(false);
   const [loaderAddByIndex, setLoaderAddByIndex] = useState(false);
   const [loaderDelByIndex, setLoaderDelByIndex] = useState(false);
-  const [addedNode, setAddedNode] = useState(new Node(''));
+  const [addedNode, setAddedNode] = useState<Node<TElement | TNumber> | null>(null);
+  const [addedIndex, setAddedIndex] = useState<number>(-1);
 
   const handleInputValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
@@ -35,25 +36,29 @@ export const ListPage: React.FC = () => {
 
   const handlePrependInList = async (inputValue: string | number) => {
     setLoaderAddHead(true);
-    setArrayToRender(linkedList.toArray());
+    setAddedIndex(0);
     await setDelay(SHORT_DELAY_IN_MS);
+
     linkedList.prepend({
-        value: `${inputValue}`,
-        color: ElementStates.Modified
-      });
-    setArrayToRender(linkedList.toArray());
+      value: `${inputValue}`,
+      color: ElementStates.Modified
+    });
+
     await setDelay(SHORT_DELAY_IN_MS);
-    const addedNode = linkedList.getLastAddedNode();
-    if(addedNode) {
-      addedNode.value = {
-        value: `${inputValue}`,
-        color: ElementStates.Default,
-      };
-    }
+    setArrayToRender(linkedList.toArray());
+    setAddedNode(linkedList.getLastAddedNode());
+
+    linkedList.getLastAddedNode()!.value = {
+      value: `${inputValue}`,
+      color: ElementStates.Default
+    };
+
     await setDelay(SHORT_DELAY_IN_MS);
     setArrayToRender(linkedList.toArray());
     setInputValue("");
     setLoaderAddHead(false);
+    setAddedNode(null);
+    setAddedIndex(-1);
   }
 
   return (
@@ -64,7 +69,9 @@ export const ListPage: React.FC = () => {
           <div className={style.changeButtons}>
             <Button isLoader={loaderAddHead} linkedList="big" text={'Добавить в head'}
                     disabled={!inputValue || loaderAddTail || loaderDelHead || loaderDelTail || loaderAddByIndex || loaderDelByIndex}
-            onClick={() => {handlePrependInList(inputValue)}}/>
+                    onClick={() => {
+                      handlePrependInList(inputValue)
+                    }}/>
             <Button isLoader={loaderAddTail} linkedList="big" text={'Добавить в tail'}
                     disabled={!inputValue || loaderAddHead || loaderDelHead || loaderDelTail || loaderAddByIndex || loaderDelByIndex}/>
             <Button isLoader={loaderDelHead} linkedList="big" text={'Удалить из head'}
@@ -88,16 +95,16 @@ export const ListPage: React.FC = () => {
           {arrayToRender.map((item, index: number) => {
             return (
               <li key={index} className={style.node}>
-                {addedNode.value && (
-                  <Circle
+                {addedIndex === index
+                  ? <Circle
                     state={ElementStates.Changing}
                     isSmall={true}
                     letter={`${inputValue}`}
-                    extraClass={style.addNode}
+                    extraClass={style.addedNode}
                   />
-                )}
+                  : null}
                 <Circle key={index} index={index} letter={`${item.value.value}`} state={item.value.color}
-                        head={index === 0 ? 'head' : ''}
+                        head={index === 0 && !loaderAddHead ? 'head' : ''}
                         tail={item.next === null ? 'tail' : ''}/>
                 {item.next && <ArrowIcon fill={item.value.color === ElementStates.Changing ? '#D252E1' : undefined}/>}
               </li>

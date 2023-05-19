@@ -44,4 +44,11 @@
   align-items: center;
   column-gap: 25px;
   display: flex;
+  position: relative;
+}
+
+.addedNode {
+  position: absolute;
+  top: -80px;
+  left: 12px;
 }
