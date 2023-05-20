@@ -227,12 +227,16 @@ export const ListPage: React.FC = () => {
                  value={Number(inputIndex)}/>
           <div className={style.changeButtons}>
             <Button isLoader={loaderAddByIndex} linkedList="big" text={'Добавить по индексу'}
-                    disabled={!inputValue || !inputIndex || loaderAddHead || loaderAddTail || loaderDelHead || loaderDelTail || loaderDelByIndex}
+                    disabled={
+                      Number(inputIndex) > linkedList.getLength() - 1 || !inputValue || !inputIndex || loaderAddHead ||
+                      loaderAddTail || loaderDelHead || loaderDelTail || loaderDelByIndex}
                     onClick={() => {
                       handleAddedByIndexInList(inputValue, inputIndex)
                     }}/>
             <Button isLoader={loaderDelByIndex} linkedList="big" text={'Удалить по индексу'}
-                    disabled={!inputIndex || loaderAddHead || loaderAddTail || loaderDelHead || loaderAddByIndex || loaderDelTail}
+                    disabled={
+                      Number(inputIndex) > linkedList.getLength() - 1 || !inputIndex || loaderAddHead ||
+                      loaderAddTail || loaderDelHead || loaderAddByIndex || loaderDelTail}
                     onClick={() => {
                       handleDeletedByIndexInList(inputIndex)
                     }}/>
