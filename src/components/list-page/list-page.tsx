@@ -6,7 +6,7 @@ import {Button} from "../ui/button/button";
 import {Circle} from "../ui/circle/circle";
 import {TElement, TNumber} from "../../types/element";
 import {getRandomArr, setDelay} from "../../utils/utils";
-import {LinkedList, Node} from "./LinkedList";
+import {LinkedList} from "./LinkedList";
 import {ElementStates} from "../../types/element-states";
 import {ArrowIcon} from "../ui/icons/arrow-icon";
 import {SHORT_DELAY_IN_MS} from "../../constants/delays";
@@ -26,19 +26,22 @@ export const ListPage: React.FC = () => {
   const [loaderDelByIndex, setLoaderDelByIndex] = useState(false);
 
   const [addedIndex, setAddedIndex] = useState<number>(-1);
+  const [addNode, setAddNode] = useState(false);
   const [deletedIndex, setDeletedIndex] = useState<number>(-1);
-  const [deletedNode, setDeletedNode] =
-    useState<Node<TElement | TNumber> | null>(null);
+  const [deletedNodeValue, setDeletedNodeValue] =
+    useState<string | number>('');
   const handleInputValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   }
+  const [deleted, setDeleted] = useState(false);
   const handleInputIndex = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputIndex(e.target.value);
   }
 
   const handlePrependInList = async (inputValue: string | number) => {
     setLoaderAddHead(true);
-    setAddedIndex(0);
+    setAddedIndex(linkedList.getLength());
+    setAddNode(true);
     await setDelay(SHORT_DELAY_IN_MS);
 
     linkedList.prepend({
@@ -58,13 +61,14 @@ export const ListPage: React.FC = () => {
     setArrayToRender(linkedList.toArray());
     setInputValue("");
     setLoaderAddHead(false);
-
+    setAddNode(true);
     setAddedIndex(-1);
   }
 
   const handleAppendInList = async (inputValue: string | number) => {
     setLoaderAddTail(true);
-    setAddedIndex(linkedList.getLength() - 1);
+    setAddedIndex(1);
+    setAddNode(true);
     await setDelay(SHORT_DELAY_IN_MS);
 
     linkedList.append({
@@ -84,31 +88,38 @@ export const ListPage: React.FC = () => {
     await setDelay(SHORT_DELAY_IN_MS);
     setArrayToRender(linkedList.toArray());
     setInputValue("");
+    setAddNode(false);
     setLoaderAddTail(false);
 
   }
   const handleAddedByIndexInList = async (inputValue: string | number, inputIndex: string | number) => {
 
     setLoaderAddByIndex(true);
-    setAddedIndex(Number(inputIndex));
-    await setDelay(SHORT_DELAY_IN_MS);
+    setAddNode(true);
+    for (let i = 0; i <= Number(inputIndex); i++) {
+      setAddedIndex(linkedList.getLength() - i);
+      if (i < Number(inputIndex)) {
+        linkedList.findByIndex(i)!.value.color = ElementStates.Changing;
+      }
+      setArrayToRender(linkedList.toArray());
+      await setDelay(SHORT_DELAY_IN_MS);
+    }
+    setAddNode(false);
 
     linkedList.insertAt({
       value: `${inputValue}`,
       color: ElementStates.Modified
     }, Number(inputIndex));
-
-    await setDelay(SHORT_DELAY_IN_MS);
     setArrayToRender(linkedList.toArray());
-
+    await setDelay(SHORT_DELAY_IN_MS);
+    linkedList.toArray().forEach((item) => {
+      item.value.color = ElementStates.Default
+    });
+    setArrayToRender(linkedList.toArray());
     setAddedIndex(-1);
-    linkedList.getLastAddedNode()!.value = {
-      value: `${inputValue}`,
-      color: ElementStates.Default
-    };
+
 
     await setDelay(SHORT_DELAY_IN_MS);
-    setArrayToRender(linkedList.toArray());
     setInputValue("");
     setInputIndex("");
     setLoaderAddByIndex(false);
@@ -117,23 +128,30 @@ export const ListPage: React.FC = () => {
 
   const handleDeletedHeadFromList = async () => {
     setLoaderDelHead(true);
-    setDeletedIndex(0);
-    setDeletedNode(linkedList.findByIndex(0));
+    setDeleted(true);
+    setDeletedNodeValue(linkedList.findByIndex(0)!.value.value);
+    await setDelay(SHORT_DELAY_IN_MS);
+
+    setDeletedIndex(linkedList.getLength());
 
     linkedList.findByIndex(0)!.value.value = '';
+    await setDelay(SHORT_DELAY_IN_MS);
+    setArrayToRender(linkedList.toArray());
     await setDelay(SHORT_DELAY_IN_MS);
     linkedList.deleteHead();
 
     setArrayToRender(linkedList.toArray());
-    await setDelay(SHORT_DELAY_IN_MS);
+
     setLoaderDelHead(false);
     setDeletedIndex(-1);
+    setDeleted(false);
   }
 
   const handleDeletedTailFromList = async () => {
     setLoaderDelTail(true);
-    setDeletedIndex(linkedList.getLength() - 1);
-    setDeletedNode(linkedList.findByIndex(linkedList.getLength() - 1));
+    setDeleted(true);
+    setDeletedIndex(1);
+    setDeletedNodeValue(linkedList.findByIndex(linkedList.getLength() - 1)!.value.value);
 
     linkedList.findByIndex(linkedList.getLength() - 1)!.value.value = '';
     await setDelay(SHORT_DELAY_IN_MS);
@@ -143,18 +161,35 @@ export const ListPage: React.FC = () => {
     await setDelay(SHORT_DELAY_IN_MS);
     setLoaderDelTail(false);
     setDeletedIndex(-1);
+    setDeleted(false);
   }
 
   const handleDeletedByIndexInList = async (inputIndex: string | number) => {
+    setDeletedNodeValue(linkedList.findByIndex(Number(inputIndex))!.value.value);
+    await setDelay(SHORT_DELAY_IN_MS);
 
     setLoaderDelByIndex(true);
-    setDeletedIndex(Number(inputIndex));
-    setDeletedNode(linkedList.findByIndex(Number(inputIndex)));
+    for (let i = 0; i <= Number(inputIndex); i++) {
+      if (i < Number(inputIndex)) {
+        linkedList.findByIndex(i)!.value.color = ElementStates.Changing;
+      }
+      setArrayToRender(linkedList.toArray());
+      await setDelay(SHORT_DELAY_IN_MS);
+    }
 
+    setDeleted(true);
+    setDeletedIndex(linkedList.getLength() - Number(inputIndex));
     linkedList.findByIndex(Number(inputIndex))!.value.value = '';
-    await setDelay(SHORT_DELAY_IN_MS);
-    linkedList.deleteByIndex(Number(inputIndex));
+    setArrayToRender(linkedList.toArray());
 
+    await setDelay(SHORT_DELAY_IN_MS);
+    setDeleted(false);
+    linkedList.deleteByIndex(Number(inputIndex));
+    setArrayToRender(linkedList.toArray());
+
+    linkedList.toArray().forEach((item) => {
+      item.value.color = ElementStates.Default
+    });
     setArrayToRender(linkedList.toArray());
     await setDelay(SHORT_DELAY_IN_MS);
     setLoaderDelByIndex(false);
@@ -207,7 +242,7 @@ export const ListPage: React.FC = () => {
           {arrayToRender.map((item, index: number) => {
             return (
               <li key={index} className={style.node}>
-                {addedIndex === index
+                {addNode && linkedList.getLength() - addedIndex === index
                   ? <Circle
                     state={ElementStates.Changing}
                     isSmall={true}
@@ -217,12 +252,13 @@ export const ListPage: React.FC = () => {
                   : null}
                 <Circle key={index} index={index} letter={`${item.value.value}`} state={item.value.color}
                         head={index === 0 && !loaderAddHead && !loaderDelHead && !loaderAddByIndex && !loaderDelByIndex ? 'head' : ''}
-                        tail={item.next === null && !loaderAddTail && !loaderDelTail && !loaderAddByIndex && !loaderDelByIndex ? 'tail' : ''}/>
-                {deletedIndex === index
+                        tail={item.next === null && !loaderAddTail && !loaderDelTail && !loaderAddByIndex && !loaderDelByIndex ? 'tail' : ''}
+                />
+                {deleted && linkedList.getLength() - deletedIndex === index
                   ? <Circle
                     state={ElementStates.Changing}
                     isSmall={true}
-                    letter={`${deletedNode?.value.value}`}
+                    letter={`${deletedNodeValue}`}
                     extraClass={style.deletedNode}
                   />
                   : null}

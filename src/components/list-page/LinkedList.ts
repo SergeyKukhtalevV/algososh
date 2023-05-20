@@ -143,8 +143,9 @@ export class LinkedList<T> implements ILinkedList<T> {
 
   findByIndex(index: number) {
     if (index < 0 || index >= this.length) {
-      return null;
+      throw new Error("Index out of bounds");
     }
+
     let curr = this.head;
     let i = 0;
     while (i < index) {
