@@ -69,6 +69,7 @@ export class Queue<T> implements IQueue<T> {
     this.container = Array(this.size).fill(this.item);
     this.head = 0;
     this.tail = 0;
+    this.length = 0;
   }
   getLength = (): number => {
     return this.length;
