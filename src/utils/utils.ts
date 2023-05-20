@@ -13,7 +13,7 @@ export const swap = (array: any[], i: number, j: number) => {
 
 export const getFibonacciArray = (n: number) => {
   const arr: number[] = [];
-  for (let i = 0; i < n ; i++) {
+  for (let i = 0; i < n; i++) {
     if (i < 2) {
       arr[i] = i;
     } else {
@@ -33,7 +33,6 @@ export const getRandomArr = (minLen: number, maxLen: number): number[] => {
 }
 
 export const selectionSort = async (
-
   arr: TNumber[],
   setLoader: Dispatch<SetStateAction<boolean>>,
   setArray: Dispatch<SetStateAction<typeof arr>>,
@@ -89,12 +88,12 @@ export const bubbleSort = async (
           swap(arr, j + 1, j);
         }
       } else {
-        if (arr[j + 1].value < arr[j].value) {
+        if (arr[j].value < arr[j + 1].value) {
           swap(arr, j + 1, j);
         }
       }
 
-      arr[j+1].color = ElementStates.Modified;
+      arr[j + 1].color = ElementStates.Modified;
       arr[j].color = ElementStates.Default;
     }
     arr[i].color = ElementStates.Modified;

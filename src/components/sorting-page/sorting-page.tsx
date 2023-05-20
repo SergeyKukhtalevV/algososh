@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {SolutionLayout} from "../ui/solution-layout/solution-layout";
 import style from "./sorting-page.module.css";
 import {Button} from "../ui/button/button";
@@ -17,6 +17,10 @@ export const SortingPage: React.FC = () => {
   const [loaderDec, setLoaderDec] = useState(false);
   const [arrayToRender, setArrayToRender] = useState<TNumber[]>([]);
 
+  useEffect(() => {
+    getArrayToRender();
+  }, []);
+
   const handleSortingIncrease = (arr: TNumber[]) => {
     if (typeSorting === 'selection') {
 
@@ -30,11 +34,11 @@ export const SortingPage: React.FC = () => {
   const handleSortingDecrease = (arr: TNumber[]) => {
     if (typeSorting === 'selection') {
 
-      selectionSort(arr, setLoaderDec, setArrayToRender,false);
+      selectionSort(arr, setLoaderDec, setArrayToRender, false);
 
     } else {
 
-      bubbleSort(arr, setLoaderInc, setArrayToRender, false);
+      bubbleSort(arr, setLoaderDec, setArrayToRender, false);
     }
   }
   const getArrayToRender = () => {
@@ -58,9 +62,11 @@ export const SortingPage: React.FC = () => {
             }}/>
           </div>
           <div className={style.directionSortingButtons}>
-            <Button text={'По возрастанию'} isLoader={loaderInc} sorting={Direction.Ascending} disabled={loaderDec || arrayToRender.length === 0}
+            <Button text={'По возрастанию'} isLoader={loaderInc} sorting={Direction.Ascending}
+                    disabled={loaderDec || arrayToRender.length === 0}
                     onClick={() => handleSortingIncrease(arrayToRender)} linkedList="big"/>
-            <Button text={'По убыванию'} isLoader={loaderDec} sorting={Direction.Descending} disabled={loaderInc || arrayToRender.length === 0}
+            <Button text={'По убыванию'} isLoader={loaderDec} sorting={Direction.Descending}
+                    disabled={loaderInc || arrayToRender.length === 0}
                     onClick={() => handleSortingDecrease(arrayToRender)} linkedList="big"/>
           </div>
           <Button text={'Новый массив'} onClick={getArrayToRender} disabled={loaderInc || loaderDec}/>
