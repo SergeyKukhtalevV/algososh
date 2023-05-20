@@ -188,7 +188,7 @@ export const ListPage: React.FC = () => {
         </div>
         <div className={style.container}>
 
-          <Input type={"number"} onChange={handleInputIndex}
+          <Input type={"number"} onChange={handleInputIndex} max={linkedList.getLength() - 1} min={0}
                  value={Number(inputIndex)}/>
           <div className={style.changeButtons}>
             <Button isLoader={loaderAddByIndex} linkedList="big" text={'Добавить по индексу'}
