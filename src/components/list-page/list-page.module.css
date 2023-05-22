@@ -1,0 +1,60 @@
+.wrapper {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  row-gap: 12px;
+  width: 100%;
+}
+
+.container {
+  align-items: flex-start;
+  column-gap: 12px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 0 auto;
+  max-width: 980px;
+  width: 100%;
+}
+
+
+.changeButtons {
+  align-items: center;
+  column-gap: 12px;
+  display: flex;
+  flex-direction: row;
+  max-width: 736px;
+  width: 100%;
+}
+
+.containerResult {
+  align-items: flex-end;
+  column-gap: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  list-style: none;
+  margin: 90px 0 0;
+  max-width: 980px;
+  padding: 0;
+  width: 100%;
+}
+
+.node {
+  align-items: center;
+  column-gap: 25px;
+  display: flex;
+  position: relative;
+}
+
+.addedNode {
+  position: absolute;
+  top: -80px;
+  left: 12px;
+}
+
+.deletedNode{
+  position: absolute;
+  bottom: -120px;
+  left: 12px;
+}
