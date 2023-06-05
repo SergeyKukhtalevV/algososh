@@ -38,6 +38,7 @@ export const unwrapString = async (
     setArray([...array]);
   }
   setLoader(false);
+  return array.map(item => item.value).join('');
 }
 
 export const getFibonacciArray = (n: number) => {
