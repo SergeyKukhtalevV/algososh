@@ -71,6 +71,8 @@ export const selectionSort = async (
   setLoader(true);
 
   const {length} = arr;
+  if (length === 0) return [];
+
   for (let i = 0; i < length - 1; i++) {
     let currInd = i;
     for (let j = i + 1; j < length; j++) {
@@ -97,6 +99,7 @@ export const selectionSort = async (
   arr[length - 1].color = ElementStates.Modified;
   setArray([...arr]);
   setLoader(false);
+  return arr;
 }
 
 export const bubbleSort = async (
@@ -107,6 +110,8 @@ export const bubbleSort = async (
   setLoader(true);
 
   const {length} = arr;
+  if (length === 0) return [];
+
   for (let i = length - 1; i >= 0; i--) {
     for (let j = 0; j < i; j++) {
       arr[j].color = ElementStates.Changing;
@@ -131,4 +136,5 @@ export const bubbleSort = async (
 
   setArray([...arr]);
   setLoader(false);
+  return arr;
 }
