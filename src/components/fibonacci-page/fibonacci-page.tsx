@@ -5,7 +5,7 @@ import {Input} from "../ui/input/input";
 import {Button} from "../ui/button/button";
 import {getFibonacciArray, setDelay} from '../../utils/utils'
 import {Circle} from "../ui/circle/circle";
-import { SHORT_DELAY_IN_MS} from "../../constants/delays";
+import {SHORT_DELAY_IN_MS} from "../../constants/delays";
 
 export const FibonacciPage: React.FC = () => {
   const [loader, setLoader] = useState(false);

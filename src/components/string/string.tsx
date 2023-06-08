@@ -31,6 +31,7 @@ export const StringComponent: React.FC = () => {
                   isLoader={loader}
                   disabled={!inputValue.length}
                   onClick={handleClick}
+                  type={"submit"}
           />
         </div>
         <ul className={style.containerResult}>
