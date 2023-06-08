@@ -9,7 +9,7 @@ import {SHORT_DELAY_IN_MS} from "../../constants/delays";
 
 export const FibonacciPage: React.FC = () => {
   const [loader, setLoader] = useState(false);
-  const [inputValue, setInputValue] = useState<number>(1);
+  const [inputValue, setInputValue] = useState<number| string>('');
   const [fibonacciArray, setFibonacciArray] = useState<number[]>([])
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -18,7 +18,7 @@ export const FibonacciPage: React.FC = () => {
 
   const handleClick = async () => {
     setLoader(true);
-    const array = getFibonacciArray(inputValue);
+    const array = getFibonacciArray(Number(inputValue));
     for (let i = 0; i <= array.length; i++) {
       await setDelay(SHORT_DELAY_IN_MS);
       setFibonacciArray(array.slice(0, i));
@@ -30,12 +30,13 @@ export const FibonacciPage: React.FC = () => {
     <SolutionLayout title="Последовательность Фибоначчи">
       <div className={style.wrapper}>
         <div className={style.container}>
-          <Input type={"number"} max={19} isLimitText={true} onChange={handleInput} value={inputValue}/>
+          <Input type="number" max={19} isLimitText={true} onChange={handleInput} value={inputValue}/>
           <Button text={'Рассчитать'}
                   linkedList={'small'}
                   isLoader={loader}
                   disabled={!(inputValue <= 19 && inputValue >= 1)}
                   onClick={handleClick}
+                  type={"submit"}
           />
         </div>
         <ul className={style.containerResult}>
