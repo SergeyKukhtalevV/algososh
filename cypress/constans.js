@@ -8,6 +8,8 @@ export const QUEUE = 'queue';
 export const LIST = 'list';
 
 export const SUBMIT_BUTTON = 'button[type=submit]';
+export const CLEAR_BUTTON = '[data-cy=remove]';
+export const RESET_BUTTON = 'button[type=reset]';
 export const INPUT = 'input';
 export const CIRCLE = '[data-cy=circle]';
 
