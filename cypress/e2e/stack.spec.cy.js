@@ -50,26 +50,26 @@ describe('should work algorithm stack', () => {
       cy.tick(SHORT_DELAY_IN_MS);
     }
     cy.get(CIRCLE).should("have.length", testArray.length);
-    cy.tick(SHORT_DELAY_IN_MS);
-    cy.get(CLEAR_BUTTON).click();
-    cy.get(CIRCLE).eq(0).should("have.css", "border", DEFAULT_COLOR).contains(testArray[0]);
-    cy.get(CIRCLE).eq(1).should("have.css", "border", DEFAULT_COLOR).contains(testArray[1]);
-    cy.get(CIRCLE).eq(2).should("have.css", "border", DEFAULT_COLOR).contains(testArray[2]);
-    cy.get(CIRCLE).eq(3).should("have.css", "border", CHANGING_COLOR).contains(testArray[3]);
-    cy.tick(SHORT_DELAY_IN_MS);
-    cy.get(CLEAR_BUTTON).click();
-    cy.get(CIRCLE).eq(0).should("have.css", "border", DEFAULT_COLOR).contains(testArray[0]);
-    cy.get(CIRCLE).eq(1).should("have.css", "border", DEFAULT_COLOR).contains(testArray[1]);
-    cy.get(CIRCLE).eq(2).should("have.css", "border", CHANGING_COLOR).contains(testArray[2]);
-    cy.tick(SHORT_DELAY_IN_MS);
-    cy.get(CLEAR_BUTTON).click();
-    cy.get(CIRCLE).eq(0).should("have.css", "border", DEFAULT_COLOR).contains(testArray[0]);
-    cy.get(CIRCLE).eq(1).should("have.css", "border", CHANGING_COLOR).contains(testArray[1]);
-    cy.tick(SHORT_DELAY_IN_MS);
-    cy.get(CLEAR_BUTTON).click();
-    cy.get(CIRCLE).eq(0).should("have.css", "border", CHANGING_COLOR).contains(testArray[0]);
-    cy.tick(SHORT_DELAY_IN_MS);
-    cy.get(CIRCLE).should("have.length", 0).should("not.exist");
+    let lengthRenderArray = testArray.length;
+    for (let i = 0; i < testArray.length; i++) {
+      cy.tick(SHORT_DELAY_IN_MS);
+      cy.get(CLEAR_BUTTON).click();
+      if (lengthRenderArray === 0) {
+        cy.tick(SHORT_DELAY_IN_MS);
+        cy.get(CIRCLE).should("have.length", 0).should("not.exist");
+        break;
+      } else {
+        for (let j = 0; j < lengthRenderArray; j++) {
+          if (j !== lengthRenderArray - 1) {
+            cy.get(CIRCLE).eq(j).should("have.css", "border", DEFAULT_COLOR).contains(testArray[j]);
+          } else {
+            cy.get(CIRCLE).eq(j).should("have.css", "border", CHANGING_COLOR).contains(testArray[j]);
+          }
+        }
+      }
+      lengthRenderArray--;
+    }
+
   });
 
   it('should removed all items in the stack', () => {
