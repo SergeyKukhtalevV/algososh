@@ -207,18 +207,22 @@ export const ListPage: React.FC = () => {
                     disabled={!inputValue || loaderAddTail || loaderDelHead || loaderDelTail || loaderAddByIndex || loaderDelByIndex}
                     onClick={() => {
                       handlePrependInList(inputValue)
-                    }}/>
+                    }}
+                    type={"submit"}/>
             <Button isLoader={loaderAddTail} linkedList="big" text={'Добавить в tail'}
                     disabled={!inputValue || loaderAddHead || loaderDelHead || loaderDelTail || loaderAddByIndex || loaderDelByIndex}
                     onClick={() => {
                       handleAppendInList(inputValue)
-                    }}/>
+                    }}
+                    type={"submit"}/>
             <Button isLoader={loaderDelHead} linkedList="big" text={'Удалить из head'}
                     disabled={loaderAddHead || loaderAddTail || loaderDelTail || loaderAddByIndex || loaderDelByIndex}
-                    onClick={handleDeletedHeadFromList}/>
+                    onClick={handleDeletedHeadFromList}
+                    data-cy='remove'/>
             <Button isLoader={loaderDelTail} linkedList="big" text={'Удалить из tail'}
                     disabled={loaderAddHead || loaderAddTail || loaderDelHead || loaderAddByIndex || loaderDelByIndex}
-                    onClick={handleDeletedTailFromList}/>
+                    onClick={handleDeletedTailFromList}
+                    data-cy='remove'/>
           </div>
         </div>
         <div className={style.container}>
@@ -232,14 +236,16 @@ export const ListPage: React.FC = () => {
                       loaderAddTail || loaderDelHead || loaderDelTail || loaderDelByIndex}
                     onClick={() => {
                       handleAddedByIndexInList(inputValue, inputIndex)
-                    }}/>
+                    }}
+                    type={"submit"}/>
             <Button isLoader={loaderDelByIndex} linkedList="big" text={'Удалить по индексу'}
                     disabled={
                       Number(inputIndex) > linkedList.getLength() - 1 || !inputIndex || loaderAddHead ||
                       loaderAddTail || loaderDelHead || loaderAddByIndex || loaderDelTail}
                     onClick={() => {
                       handleDeletedByIndexInList(inputIndex)
-                    }}/>
+                    }}
+                    data-cy='remove'/>
           </div>
         </div>
         <ul className={style.containerResult}>
