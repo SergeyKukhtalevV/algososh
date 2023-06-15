@@ -12,6 +12,9 @@ export const CLEAR_BUTTON = '[data-cy=remove]';
 export const RESET_BUTTON = 'button[type=reset]';
 export const INPUT = 'input';
 export const CIRCLE = '[data-cy=circle]';
+export const CIRCLE_HEAD = "[data-cy=head]";
+export const CIRCLE_INDEX = "[data-cy=index]";
+export const CIRCLE_TAIL = "[data-cy=tail]";
 
 export const DEFAULT_COLOR = "4px solid rgb(0, 50, 255)";
 export const CHANGING_COLOR = "4px solid rgb(210, 82, 225)";
