@@ -63,4 +63,26 @@ describe('should work algorithm list', () => {
       cy.wrap(circle).should('have.css', 'border', DEFAULT_COLOR).invoke(text);
     });
   });
+  it('removed item in the head', () => {
+    cy.visit(BASE_URL + LIST);
+    cy.clock();
+    cy.get(CLEAR_BUTTON).first().click();
+    cy.tick(DELAY_IN_MS);
+    cy.tick(DELAY_IN_MS);
+    cy.get(CIRCLE).each((circle, index) => {
+      cy.wrap(circle)
+        .should('have.css', 'border', index === 1 ? CHANGING_COLOR : DEFAULT_COLOR)
+        .invoke('text')
+        .should(index === 0 ? 'be.empty' : 'not.be.empty');
+    });
+    cy.tick(DELAY_IN_MS);
+    cy.get(CIRCLE)
+      .each((circle) => {
+        cy.wrap(circle).should('have.css', 'border', DEFAULT_COLOR)
+          .should('not.be.empty')
+          .invoke('text');
+      });
+    cy.get(CIRCLE_HEAD).first().contains('head');
+    cy.get(CIRCLE_TAIL).last().contains('tail');
+  });
 });
