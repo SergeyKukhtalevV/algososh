@@ -130,4 +130,39 @@ describe('should work algorithm list', () => {
     cy.get(CIRCLE_TAIL).last().contains('tail');
   });
 
+  it('added item to the index', () => {
+    cy.visit(BASE_URL + LIST);
+    cy.clock();
+    cy.get(INPUT).first().type(text);
+    cy.get(INPUT).last().type(2);
+    cy.get(SUBMIT_BUTTON).eq(2).click();
+    cy.get(CIRCLE).each((circle, index) => {
+      if (index === 0) {
+        cy.wrap(circle).contains(text);
+      }
+      cy.wrap(circle).should('have.css', 'border', index === 0 || index === 1 ? CHANGING_COLOR : DEFAULT_COLOR).invoke(text);
+    });
+    cy.tick(DELAY_IN_MS);
+    cy.tick(DELAY_IN_MS);
+    cy.tick(DELAY_IN_MS);
+    cy.get(CIRCLE).each((circle, index) => {
+      cy.wrap(circle).should(
+        'have.css',
+        'border',
+        index === 0 || index === 1 ? CHANGING_COLOR : index === 2 ? MODIFIED_COLOR : DEFAULT_COLOR
+      );
+      if (index === 2) {
+        cy.wrap(circle).contains(text);
+      }
+    });
+    cy.tick(DELAY_IN_MS);
+    cy.tick(DELAY_IN_MS);
+    cy.get(CIRCLE_HEAD).first().contains('head');
+    cy.get(CIRCLE_TAIL).last().contains('tail');
+    cy.tick(SHORT_DELAY_IN_MS);
+    cy.get(CIRCLE).each((circle) => {
+      cy.wrap(circle).should('have.css', 'border', DEFAULT_COLOR).invoke(text);
+    });
+  });
+
 });
