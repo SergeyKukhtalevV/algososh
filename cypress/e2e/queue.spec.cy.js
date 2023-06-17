@@ -73,6 +73,7 @@ describe('should work algorithm queue', () => {
         cy.get(CIRCLE)
           .should("have.length", 7)
           .each((item) => {
+            // eslint-disable-next-line jest/no-conditional-expect
             expect(item).contain("");
           });
         break;
