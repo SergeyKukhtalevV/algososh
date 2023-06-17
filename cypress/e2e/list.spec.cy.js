@@ -72,7 +72,7 @@ describe('should work algorithm list', () => {
     cy.get(CIRCLE).each((circle, index) => {
       cy.wrap(circle)
         .should('have.css', 'border', index === 1 ? CHANGING_COLOR : DEFAULT_COLOR)
-        .invoke('text')
+        .invoke(text)
         .should(index === 0 ? 'be.empty' : 'not.be.empty');
     });
     cy.tick(DELAY_IN_MS);
@@ -80,9 +80,30 @@ describe('should work algorithm list', () => {
       .each((circle) => {
         cy.wrap(circle).should('have.css', 'border', DEFAULT_COLOR)
           .should('not.be.empty')
-          .invoke('text');
+          .invoke(text);
       });
     cy.get(CIRCLE_HEAD).first().contains('head');
     cy.get(CIRCLE_TAIL).last().contains('tail');
+  });
+  it('added item in the tail', () => {
+    cy.visit(BASE_URL + LIST);
+    cy.clock();
+    cy.get(INPUT).first().type(text);
+    cy.get(SUBMIT_BUTTON).eq(1).click();
+    cy.get(CIRCLE).each((circle, index) => {
+      if (index === 3) {
+        cy.wrap(circle).contains(text);
+      }
+      cy.wrap(circle).should('have.css', 'border', index === 3 ? CHANGING_COLOR : DEFAULT_COLOR).invoke(text);
+    });
+    cy.tick(DELAY_IN_MS);
+    cy.tick(DELAY_IN_MS);
+    cy.tick(DELAY_IN_MS);
+    cy.get(CIRCLE_HEAD).first().contains('head');
+    cy.get(CIRCLE_TAIL).last().contains('tail');
+    cy.tick(SHORT_DELAY_IN_MS);
+    cy.get(CIRCLE).each((circle) => {
+      cy.wrap(circle).should('have.css', 'border', DEFAULT_COLOR).invoke(text);
+    });
   });
 });

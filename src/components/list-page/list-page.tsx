@@ -14,7 +14,7 @@ import {SHORT_DELAY_IN_MS} from "../../constants/delays";
 export const ListPage: React.FC = () => {
   const [inputValue, setInputValue] = useState<string | number>('');
   const [inputIndex, setInputIndex] = useState<string | number>('');
-  const [linkedList] = useState(new LinkedList<TElement | TNumber>(getRandomArr(2, 4).map((value: number) => {
+  const [linkedList] = useState(new LinkedList<TElement | TNumber>(getRandomArr(4, 4).map((value: number) => {
     return {value, color: ElementStates.Default};
   })));
   const [arrayToRender, setArrayToRender] = useState(linkedList.toArray());
