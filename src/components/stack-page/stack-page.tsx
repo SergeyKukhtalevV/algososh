@@ -57,12 +57,12 @@ export const StackPage: React.FC = () => {
           <Input type={"text"} maxLength={4} isLimitText={true} onChange={handleInput} value={inputValue}/>
           <div className={style.changeButtons}>
             <Button text={'Добавить'} isLoader={loaderPush} disabled={loaderPop || inputValue.length === 0}
-                    onClick={handlePushItem}/>
+                    onClick={handlePushItem} type={"submit"}/>
             <Button text={'Удалить'} isLoader={loaderPop} disabled={loaderPush || stack.getSize() === 0}
-                    onClick={handlePopItem}/>
+                    onClick={handlePopItem} data-cy='remove'/>
           </div>
           <Button text={'Очистить'} disabled={loaderPop || loaderPush || stack.getSize() === 0}
-                  onClick={handleStackClear}/>
+                  onClick={handleStackClear} type={"reset"}/>
         </div>
         <ul className={style.containerResult}>
           {arrayToRender.map((item: TElement, index) => {

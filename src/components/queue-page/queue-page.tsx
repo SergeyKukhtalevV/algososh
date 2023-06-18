@@ -53,12 +53,12 @@ export const QueuePage: React.FC = () => {
           <div className={style.changeButtons}>
             <Button text={'Добавить'} isLoader={loaderEnq}
                     disabled={loaderDeq || inputValue.length === 0 || queue.getLength() === queue.getSize()}
-                    onClick={handleEnqItem}/>
+                    onClick={handleEnqItem} type={"submit"} />
             <Button text={'Удалить'} isLoader={loaderDeq} disabled={loaderEnq || queue.isEmpty()}
-                    onClick={handleDegItem}/>
+                    onClick={handleDegItem} data-cy='remove' />
           </div>
           <Button text={'Очистить'} disabled={loaderEnq || loaderDeq || queue.isEmpty()}
-                  onClick={handleQueueClear}/>
+                  onClick={handleQueueClear} type={"reset"} />
         </div>
         <ul className={style.containerResult}>
           {arrayToRender.map((item: TElement, index) => {

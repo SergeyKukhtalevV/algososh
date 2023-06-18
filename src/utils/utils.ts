@@ -1,7 +1,7 @@
-import {TNumber} from "../types/element";
+import {TElement, TNumber} from "../types/element";
 import {Dispatch, SetStateAction} from "react";
 import {ElementStates} from "../types/element-states";
-import {SHORT_DELAY_IN_MS} from "../constants/delays";
+import {DELAY_IN_MS, SHORT_DELAY_IN_MS} from "../constants/delays";
 
 export const setDelay = (delay: number) => {
   return new Promise(resolve => setTimeout(resolve, delay));
@@ -9,6 +9,36 @@ export const setDelay = (delay: number) => {
 
 export const swap = (array: any[], i: number, j: number) => {
   ([array[i], array[j]] = [array[j], array[i]]);
+}
+
+export const unwrapString = async (
+  inputValue: string,
+  setLoader: Dispatch<SetStateAction<boolean>>,
+  setArray: Dispatch<SetStateAction<TElement[]>>,) => {
+
+  setLoader(true);
+  const array: TElement[] = inputValue.split('').map((value: string) => {
+    return {value, color: ElementStates.Default};
+  });
+  setArray(array);
+  const medium = Math.ceil(array.length / 2);
+
+  for (let i = 0; i < medium; i++) {
+    let j = array.length - 1 - i;
+    if (i !== j) {
+      array[i].color = ElementStates.Changing;
+      array[j].color = ElementStates.Changing;
+      setArray([...array]);
+      await setDelay(DELAY_IN_MS);
+    }
+
+    swap(array, i, j);
+    array[i].color = ElementStates.Modified;
+    array[j].color = ElementStates.Modified;
+    setArray([...array]);
+  }
+  setLoader(false);
+  return array.map(item => item.value).join('');
 }
 
 export const getFibonacciArray = (n: number) => {
@@ -41,6 +71,8 @@ export const selectionSort = async (
   setLoader(true);
 
   const {length} = arr;
+  if (length === 0) return [];
+
   for (let i = 0; i < length - 1; i++) {
     let currInd = i;
     for (let j = i + 1; j < length; j++) {
@@ -67,6 +99,7 @@ export const selectionSort = async (
   arr[length - 1].color = ElementStates.Modified;
   setArray([...arr]);
   setLoader(false);
+  return arr;
 }
 
 export const bubbleSort = async (
@@ -77,6 +110,8 @@ export const bubbleSort = async (
   setLoader(true);
 
   const {length} = arr;
+  if (length === 0) return [];
+
   for (let i = length - 1; i >= 0; i--) {
     for (let j = 0; j < i; j++) {
       arr[j].color = ElementStates.Changing;
@@ -101,4 +136,5 @@ export const bubbleSort = async (
 
   setArray([...arr]);
   setLoader(false);
+  return arr;
 }
